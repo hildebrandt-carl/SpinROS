@@ -1,0 +1,9 @@
+<launch>
+	<!-- <node  /> -->
+	<node pkg="sample_package" type="sample_package_node" name="sample_package_node_instance">
+		<param name="stringParam" type="string" value="one"/>
+		<param name="intParam" type="int" value="2" />
+		<param name="doubleParam" type="double" value="3.0" />
+		<param name="boolParam" type="bool" value="true" />
+	</node>
+</launch>
