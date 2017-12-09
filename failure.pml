@@ -17,18 +17,18 @@ proctype master(chan in, out)
 	do
 	// If the master receives a publisher request
 	:: in?pub, namespace ->	
-		printf("Pub requesting registration\n");
+		printf("MASTER: Pub requesting registration\n");
 		atomic
 		{
 			// Add it to the table and accept
 			mas_table[mas_table_number] = namespace ;
-			printf("New byte %c received and stored in position %d\n",namespace,mas_table_number) ;
+			printf("MASTER: New byte %c received and stored in position %d\n",namespace,mas_table_number) ;
 			mas_table_number++ ;
 			out!puback,namespace ;
 		}
 	// If the master receives a subscriber request
 	:: in?sub, namespace->
-			printf("Sub requesting registration\n");
+			printf("MASTER: Sub requesting registration\n");
 			if
 			// Find it in the table and reply back
 			:: mas_table[0] == namespace -> out!suback,namespace ;
@@ -41,7 +41,7 @@ proctype master(chan in, out)
 	od
 }
 
-proctype publisher(chan in, out, publish, topic)
+proctype publisher(chan in, out, publish; byte topic)
 {
 	byte namespace ;
 	bit registered = 0;
@@ -52,24 +52,24 @@ proctype publisher(chan in, out, publish, topic)
 				atomic
 				{
 					// Register
-					printf("Requesting Publisher Registration\n") ;
+					printf("PUBLISHER: Requesting Publisher Registration\n") ;
 					out!pub,topic ;
 					in?puback, namespace -> registered = 1 ;
 				}
 		// If the node has registered with the master
 		:: registered == 1 ->
-			printf("Publisher Registered\n") ;
+			printf("PUBLISHER: Publisher Registered\n") ;
 			do
 			// Start sending data
-			:: p2s!'f' -> printf("Publishing f\n") ;
-			:: p2s!'g' -> printf("Publishing g\n") ; 
-			:: p2s!'h' -> printf("Publishing h\n") ;
+			:: p2s!'f' -> printf("PUBLISHER: Publishing f\n") ;
+			:: p2s!'g' -> printf("PUBLISHER: Publishing g\n") ; 
+			:: p2s!'h' -> printf("PUBLISHER: Publishing h\n") ;
 			od
 		fi
 	od
 }
 
-proctype subscriber(chan in, out, publish, topic)
+proctype subscriber(chan in, out, publish; byte topic)
 {
 	byte namespace, inputMessage ;
 	bit registered = 0;
@@ -80,16 +80,16 @@ proctype subscriber(chan in, out, publish, topic)
 				atomic
 				{
 					// Register
-					printf("Requesting Subscriber Registration\n") ;
+					printf("SUBSCRIBER: Requesting Subscriber Registration\n") ;
 					out!sub,topic ;
 					in?suback, namespace -> registered = 1 ;
 				}
 		// If the subscriber has registered
 		:: registered == 1 ->
-			printf("Subscriber Registered\n") ;
+			printf("SUBSCRIBER: Subscriber Registered\n") ;
 			do
 			// Listen for input and then print it
-			:: p2s?inputMessage -> printf("Subscriber Recieved %c\n",inputMessage) ;
+			:: p2s?inputMessage -> printf("SUBSCRIBER: Subscriber Recieved %c\n",inputMessage) ;
 			od
 		fi
 	od
@@ -100,6 +100,8 @@ init
 	atomic
 	{
 		run master(n2m,m2n) ;
+		run publisher(m2n,n2m,p2s,'a') ;
+		run publisher(m2n,n2m,p2s,'a') ;
 		run publisher(m2n,n2m,p2s,'a') ;
 		run subscriber(m2n,n2m,p2s,'a') ;
 	}
