@@ -8,18 +8,11 @@ find_package(catkin REQUIRED COMPONENTS
 	roscpp
 	rospy
 	std_msgs
-	message_generation
 )
 
 ################################################
 ## Declare ROS messages, services and actions ##
 ################################################
-
-## Generate messages in the 'msg' folder
-add_message_files(
-	FILES
-	ExampleMessage.msg
-)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -34,12 +27,6 @@ add_message_files(
 #   Action1.action
 #   Action2.action
 # )
-
-## Generate added messages and services with any dependencies listed here
-generate_messages(
-	DEPENDENCIES
-	std_msgs
-)
 
 ###################################
 ## catkin specific configuration ##
@@ -73,11 +60,12 @@ include_directories(
 )
 
 ## Declare a C++ executable
-add_executable(sample_package_node src/sample_package_node.cpp)
+add_executable(thePublisher src/thePublisher.cpp)
+add_executable(theSubscriber src/theSubscriber.cpp)
 
 ## Add cmake target dependencies of the executable
-## same as for the library above
-add_dependencies(sample_package_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(thePublisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(theSubscriber ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(sample_package_node
