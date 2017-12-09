@@ -1,3 +1,4 @@
+// Alternating bit protocol implentation
 mtype {MSG, ACK} ;
 
 chan toR = [0] of { mtype , bit} ;

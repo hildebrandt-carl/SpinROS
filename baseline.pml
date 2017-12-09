@@ -1,8 +1,8 @@
 mtype = { a0, a1, p1, s1, d, err }
 
-chan p2s = [0] of { mtype }	// a rendezvous channel for messages from A to B
-chan n2m = [0] of { mtype }	// a second channel for the reverse direction
-chan out = [0] of { mtype }	// a second channel for the reverse direction
+chan p2s = [0] of { mtype }	
+chan n2m = [0] of { mtype }	
+chan out = [0] of { mtype }	
 
 proctype m()
 {

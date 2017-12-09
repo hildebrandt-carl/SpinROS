@@ -101,8 +101,6 @@ init
 	{
 		run master(n2m,m2n) ;
 		run publisher(m2n,n2m,p2s,'a') ;
-		run publisher(m2n,n2m,p2s,'a') ;
-		run publisher(m2n,n2m,p2s,'a') ;
 		run subscriber(m2n,n2m,p2s,'a') ;
 	}
 }
