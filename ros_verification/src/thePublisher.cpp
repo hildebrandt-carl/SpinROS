@@ -2,31 +2,31 @@
 #include "std_msgs/String.h"
 #include "stdint.h"
 
-class subscriber_class {
+class publisher_class {
 private:
 	//A smart pointer to the node handle
 	ros::NodeHandle nh;
 	//The frequency of the loop
 	ros::Rate rosRate;	//Hertz
 
-	//Subscribers
-	ros::Subscriber exampleSub;
-
-	void exampleCallback(const std_msgs::StringConstPtr& msg)
-	{
-		ROS_INFO("Recieved %s", msg->data);
-	}
+	//Publishers
+	ros::Publisher examplePub;
 
 public:
-	subscriber_class(): rosRate(20.0)
+	publisher_class()
+		: rosRate(20.0)
 	{
-		exampleSub = nh.subscribe("a", 100, &subscriber_class::exampleCallback, this);
+		examplePub = nh.advertise<std_msgs::String>("a", 100);
 	}
 
 	int main() {
 		//Periodic loop
 		while (ros::ok()) 
 		{
+			//Publish the message
+			std_msgs::String str;
+			str.data = "w";
+			examplePub.publish(str);
 			ros::spinOnce();
 			rosRate.sleep();
 		}
@@ -37,7 +37,8 @@ public:
 //Main function
 int main(int argc, char **argv)
 {
-	ros::init(argc, argv, "theSubscrber");
-	subscriber_class node;
+	//Create a node	
+	ros::init(argc, argv, "thePublisherNode");
+	publisher_class node;
 	return node.main();
 }

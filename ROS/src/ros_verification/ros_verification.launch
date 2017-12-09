@@ -1,4 +1,0 @@
-<launch>
-	<node pkg="ros_verification" type="thePublisher" name="thePublisher"></node>
-	<node pkg="ros_verification" type="theSubscriber" name="theSubscriber"></node>
-</launch>
