@@ -1,23 +1,22 @@
 #include "ros/ros.h"
-#include "sample_package/ExampleMessage.h"
+#include "std_msgs/String.h"
 #include "stdint.h"
-#include <memory>
 
-class Node_sample_package {
+class publisher_class {
 private:
 	//A smart pointer to the node handle
 	ros::NodeHandle nh;
 	//The frequency of the loop
-	ros::Rate 20;	//Hertz
+	ros::Rate rosRate;	//Hertz
 
 	//Publishers
 	ros::Publisher examplePub;
 
 public:
-	Node_sample_package()
+	publisher_class()
 		: rosRate(20.0)
 	{
-		examplePub = nh.advertise<sample_package::ExampleMessage>("a", 100);
+		examplePub = nh.advertise<std_msgs::String>("a", 100);
 	}
 
 	int main() {
@@ -25,7 +24,9 @@ public:
 		while (ros::ok()) 
 		{
 			//Publish the message
-			examplePub.publish('w');
+			std_msgs::String str;
+			str.data = "w";
+			examplePub.publish(str);
 			ros::spinOnce();
 			rosRate.sleep();
 		}
@@ -38,6 +39,6 @@ int main(int argc, char **argv)
 {
 	//Create a node	
 	ros::init(argc, argv, "thePublisher");
-	Node_sample_package node;
+	publisher_class node;
 	return node.main();
 }

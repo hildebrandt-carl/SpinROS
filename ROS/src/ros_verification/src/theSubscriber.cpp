@@ -1,30 +1,26 @@
 #include "ros/ros.h"
-#include "sample_package/ExampleMessage.h"
+#include "std_msgs/String.h"
 #include "stdint.h"
-#include <memory>
 
-class Node_sample_package {
+class subscriber_class {
 private:
 	//A smart pointer to the node handle
 	ros::NodeHandle nh;
 	//The frequency of the loop
-	ros::Rate 20;	//Hertz
-
-	char inData ;
+	ros::Rate rosRate;	//Hertz
 
 	//Subscribers
 	ros::Subscriber exampleSub;
 
-	void exampleCallback(const std_msgs::char& msg)
+	void exampleCallback(const std_msgs::StringConstPtr& msg)
 	{
-		inData = data ;
-		ROS_INFO("Recieved %c", data);
+		ROS_INFO("Recieved %s", msg->data);
 	}
 
 public:
-	theSubscriber(): rosRate(20.0)
+	subscriber_class(): rosRate(20.0)
 	{
-		exampleSub = nh.subscribe("a", 100, &Node_sample_package::exampleCallback, this);
+		exampleSub = nh.subscribe("a", 100, &subscriber_class::exampleCallback, this);
 	}
 
 	int main() {
@@ -42,6 +38,6 @@ public:
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "theSubscrber");
-	Node_sample_package node;
+	subscriber_class node;
 	return node.main();
 }

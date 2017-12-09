@@ -1,4 +1,9 @@
 # ignore a file type
-*.pml.trail *.  
+*.pml.trails
+build/
+devel/
+logs/
+.catkin_tools/
+
 # add an exception (using !) to the preceding rule to track a specific file
 #!package.json
