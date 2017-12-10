@@ -2,8 +2,8 @@
 mtype = { none, puback, suback, rej, pub, sub, err } ;
 
 // The number of publishers
-int tot_pubs = 3 ;
-int tot_message = 100000
+int tot_pubs = 2 ;
+int tot_message = 10 ;
 
 // Configurable master table size
 int mas_table_size = 5 ;
@@ -94,7 +94,14 @@ start:	do
 				// Start sending data
 				::	msgs_sent < (tot_message) -> 
 					printf("PUBLISHER: Publishing %c\n", message) ;
-					p2s!message ;
+					if
+					:: empty(p2s) -> 
+							p2s!message ;
+							printf("PUBLISHER: Sending messsage\n")
+					// If the channel is full drop the message 
+					:: full(p2s) -> printf("PUBLISHER: Dropping messsage\n") ;
+					fi
+					printf("PUBLISHER: Counting messsage\n") ;
 					msgs_sent++ ;
 				:: msgs_sent == (tot_message) ->
 						// Disconnect from master
@@ -190,9 +197,11 @@ init
 	od
 	// If it reaches here it reaches a valid end state
 	printf("Ended safely\n") ;
-	printf("Total messages from publisher 1: %d\n", a_count) ;
-	printf("Total messages from publisher 2: %d\n", b_count) ;
-	printf("Total messages from publisher 3: %d\n", c_count) ;
+	printf("Total attempted messages sent : %d\n", tot_message) ;
+	printf("Total successful message sent : %d\n", a_count+b_count+c_count) ;
+	printf("Total successful messages from publisher 1: %d\n", a_count) ;
+	printf("Total successful messages from publisher 2: %d\n", b_count) ;
+	printf("Total successful messages from publisher 3: %d\n", c_count) ;
 	
 }
 
