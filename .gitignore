@@ -1,5 +1,6 @@
 # ignore a file type
 *.pml.trails
+*.out
 build/
 devel/
 logs/
