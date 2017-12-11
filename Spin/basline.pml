@@ -2,7 +2,7 @@
 mtype = { none, puback, suback, rej, pub, sub, err } ;
 
 // The number of publishers
-int tot_pubs = 2 ;
+int tot_pubs = 1 ;
 int tot_message = 10 ;
 
 // Configurable master table size
@@ -27,6 +27,9 @@ int active_mast = 0 ;
 chan n2m = [0] of {mtype, byte} ;
 chan m2n = [0] of {mtype, byte} ;
 chan p2s = [0] of {byte} ;
+
+// Check if the node is ended
+int ended = 0 ;
 
 proctype master(chan in, out)
 {
@@ -59,8 +62,10 @@ start:	do
 				fi
 		:: msgs_sent == tot_message -> break ;
 		:: msgs_sent > tot_message -> break ;
+		:: ended == 1 -> break ;
 		:: timeout -> goto start ;
 		od
+		ended = 1 ;
 		printf("MASTER: Ended\n") ;
 		active_mast-- ;
 }
@@ -70,11 +75,10 @@ proctype publisher(chan in, out, publish; byte message)
 		printf("PUBLISHER: HERER\n") ;
 		int registered_pub = 0;
 		active_pubs++ ;
-		
 start:	do
 		:: 	if
 			// If the node has not registered with the master
-			:: registered_pub == 0 ->
+			:: (registered_pub == 0) && (ended == 0) ->
 				// Register
 				printf("PUBLISHER: Requesting Publisher Registration\n") ;
 				do
@@ -85,6 +89,7 @@ start:	do
 						registered_pub = 1 ;
 						goto start ;
 					}
+				:: timeout -> goto start;
 				od
 
 			// If the node has registered with the master
@@ -113,6 +118,9 @@ start:	do
 						break ;
 				od
 			:: registered_pub == 2 -> break ;
+			:: ended == 1 ->
+				printf("breaking!\n")
+				break ;
 			fi
 		:: msgs_sent == (tot_message) -> break ;
 		od
@@ -129,7 +137,7 @@ proctype subscriber(chan in, out, publish)
 start:	do
 		:: 	if
 			// If the subscriber has not registered
-			:: registered_sub == 0 ->
+			:: (registered_sub == 0) && (ended == 0) ->
 				printf("SUBSCRIBER: Requesting Subscriber Registration\n") ;
 				do
 				:: out!sub,'a' ;
@@ -139,6 +147,7 @@ start:	do
 						registered_sub = 1 ;
 						goto start ;
 					}
+				:: timeout -> goto start;
 				od
 
 			// If the subscriber has registered
@@ -163,6 +172,7 @@ start:	do
 				:: timeout -> goto start ;
 				od
 			:: registered_sub == 2 -> break ;
+			:: ended == 1 -> break ;
 			fi
 		:: msgs_sent == tot_message -> break ;
 		od
