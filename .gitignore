@@ -1,9 +1,21 @@
 # ignore a file type
 *.pml.trails
 *.out
+*.b
+*.c
+*.h
+*.m
+*.p
+*.t
+*.tmp
+*.sel
+*.o
+
+pan/
 build/
 devel/
 logs/
+
 .catkin_tools/
 
 # add an exception (using !) to the preceding rule to track a specific file
