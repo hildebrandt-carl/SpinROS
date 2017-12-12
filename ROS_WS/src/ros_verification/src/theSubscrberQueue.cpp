@@ -37,7 +37,7 @@ public:
 //Main function
 int main(int argc, char **argv)
 {
-	ros::init(argc, argv, "theSubscrberNode");
+	ros::init(argc, argv, "theSubscrberQueue");
 	subscriber_class node;
 	return node.main();
 }

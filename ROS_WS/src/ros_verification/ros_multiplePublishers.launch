@@ -2,5 +2,5 @@
 	<node pkg="ros_verification" type="thePublisherNode1" name="thePublisherNode1"></node>
 	<node pkg="ros_verification" type="thePublisherNode2" name="thePublisherNode2"></node>
 	<node pkg="ros_verification" type="thePublisherNode3" name="thePublisherNode3"></node>
-	<node pkg="ros_verification" type="theSubscriberNode" name="theSubscriberNode" output="screen"></node>
+	<node pkg="ros_verification" type="theSubscrberQueue" name="theSubscrberQueue" output="screen"></node>
 </launch>

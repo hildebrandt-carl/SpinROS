@@ -210,6 +210,14 @@ add_executable(thePublisherNode3 src/thePublisher3.cpp)
 target_link_libraries(thePublisherNode3 ${catkin_LIBRARIES})
 add_dependencies(thePublisherNode3 ros_verifcation_generate_messages_cpp)
 
-add_executable(theSubscriberNode src/theSubscriber.cpp)
-target_link_libraries(theSubscriberNode ${catkin_LIBRARIES})
-add_dependencies(theSubscriberNode ros_verifcation_generate_messages_cpp)
+add_executable(thePublisherFaster src/thePublisherFaster.cpp)
+target_link_libraries(thePublisherFaster ${catkin_LIBRARIES})
+add_dependencies(thePublisherFaster ros_verifcation_generate_messages_cpp)
+
+add_executable(theSubscrberQueue src/theSubscrberQueue.cpp)
+target_link_libraries(theSubscrberQueue ${catkin_LIBRARIES})
+add_dependencies(theSubscrberQueue ros_verifcation_generate_messages_cpp)
+
+add_executable(theSubscrberNoQueue src/theSubscrberNoQueue.cpp)
+target_link_libraries(theSubscrberNoQueue ${catkin_LIBRARIES})
+add_dependencies(theSubscrberNoQueue ros_verifcation_generate_messages_cpp)

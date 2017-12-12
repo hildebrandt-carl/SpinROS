@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="ros_verification" type="thePublisherFaster" name="thePublisherFaster"></node>
+	<node pkg="ros_verification" type="theSubscrberNoQueue" name="theSubscrberNoQueue" output="screen"></node>
+</launch>
