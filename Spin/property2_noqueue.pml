@@ -2,8 +2,7 @@
 mtype = { none, puback, suback, rej, pub, sub, err } ;
 
 // The number of publishers
-int tot_pubs = 1 ;
-int tot_message = 100000 ;
+int tot_message = 100 ;
 
 // Configurable master table size
 int mas_table_size = 5 ;
@@ -26,7 +25,7 @@ int active_mast = 0 ;
 // Communication channels between the nodes
 chan n2m = [0] of {mtype, byte} ;
 chan m2n = [0] of {mtype, byte} ;
-chan p2s = [5 ] of {byte} ;
+chan p2s = [0] of {byte} ;
 
 // Check if the node is ended
 int ended = 0 ;
@@ -185,17 +184,7 @@ init
 	run master(n2m,m2n) ;
 	run subscriber(m2n,n2m,p2s) ;
 
-	if
-	:: tot_pubs == 1 ->
-			run publisher(m2n,n2m,p2s,'a') ;
-	:: tot_pubs == 2 ->
-			run publisher(m2n,n2m,p2s,'a') ;
-			run publisher(m2n,n2m,p2s,'b') ;
-	:: tot_pubs == 3 ->
-			run publisher(m2n,n2m,p2s,'a') ;
-			run publisher(m2n,n2m,p2s,'b') ;
-			run publisher(m2n,n2m,p2s,'c') ;
-	fi
+	run publisher(m2n,n2m,p2s,'a') ;
 
 	//Check everything has closed
 	do
@@ -213,7 +202,7 @@ init
 	printf("Total successful messages from publisher 2: %d\n", b_count) ;
 	printf("Total successful messages from publisher 3: %d\n", c_count) ;
 
-	assert(tot_message == (a_count+b_count+c_count))
-
+	assert(tot_message == (a_count+b_count+c_count)) ;
+	
 }
 

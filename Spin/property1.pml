@@ -1,9 +1,7 @@
 // Types of messages sent
 mtype = { none, puback, suback, rej, pub, sub, err } ;
 
-// The number of publishers
-int tot_pubs = 1 ;
-int tot_message = 100000 ;
+int tot_message = 100 ;
 
 // Configurable master table size
 int mas_table_size = 5 ;
@@ -185,17 +183,9 @@ init
 	run master(n2m,m2n) ;
 	run subscriber(m2n,n2m,p2s) ;
 
-	if
-	:: tot_pubs == 1 ->
-			run publisher(m2n,n2m,p2s,'a') ;
-	:: tot_pubs == 2 ->
-			run publisher(m2n,n2m,p2s,'a') ;
-			run publisher(m2n,n2m,p2s,'b') ;
-	:: tot_pubs == 3 ->
-			run publisher(m2n,n2m,p2s,'a') ;
-			run publisher(m2n,n2m,p2s,'b') ;
-			run publisher(m2n,n2m,p2s,'c') ;
-	fi
+
+	run publisher(m2n,n2m,p2s,'a') ;
+
 
 	//Check everything has closed
 	do
@@ -213,7 +203,8 @@ init
 	printf("Total successful messages from publisher 2: %d\n", b_count) ;
 	printf("Total successful messages from publisher 3: %d\n", c_count) ;
 
-	assert(tot_message == (a_count+b_count+c_count))
-
+	assert(active_mast = 0) ;
+	assert(active_pub = 0) ;
+	assert(active_subs = 0) ;
 }
 
