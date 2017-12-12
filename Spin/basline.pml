@@ -3,7 +3,7 @@ mtype = { none, puback, suback, rej, pub, sub, err } ;
 
 // The number of publishers
 int tot_pubs = 1 ;
-int tot_message = 10 ;
+int tot_message = 100000 ;
 
 // Configurable master table size
 int mas_table_size = 5 ;
@@ -26,7 +26,7 @@ int active_mast = 0 ;
 // Communication channels between the nodes
 chan n2m = [0] of {mtype, byte} ;
 chan m2n = [0] of {mtype, byte} ;
-chan p2s = [0] of {byte} ;
+chan p2s = [5 ] of {byte} ;
 
 // Check if the node is ended
 int ended = 0 ;
@@ -97,17 +97,17 @@ start:	do
 				printf("PUBLISHER: Publisher Registered\n") ;
 				do
 				// Start sending data
-				::	msgs_sent < (tot_message) -> 
+				::	msgs_sent < (tot_message) && (active_subs > 0) -> 
 					printf("PUBLISHER: Publishing %c\n", message) ;
 					if
 					:: empty(p2s) -> 
 							p2s!message ;
-							printf("PUBLISHER: Sending messsage\n")
+							printf("PUBLISHER: Sending messsage\n") ;
 					// If the channel is full drop the message 
 					:: full(p2s) -> printf("PUBLISHER: Dropping messsage\n") ;
 					fi
 					printf("PUBLISHER: Counting messsage\n") ;
-					msgs_sent++ ;
+					active_subs == 1 -> msgs_sent++ ;
 				:: msgs_sent == (tot_message) ->
 						// Disconnect from master
 						registered_pub = 2 ;
@@ -133,7 +133,6 @@ proctype subscriber(chan in, out, publish)
 		printf("SUBSCRIBER: HERER\n") ;
 		byte inputMessage ;
 		int registered_sub = 0;
-		active_subs++ ;
 start:	do
 		:: 	if
 			// If the subscriber has not registered
@@ -152,6 +151,7 @@ start:	do
 
 			// If the subscriber has registered
 			:: registered_sub == 1 ->
+				active_subs = 1 ;
 				printf("SUBSCRIBER: Subscriber Registered\n") ;
 				do
 				// Listen for input and then print it
@@ -169,7 +169,6 @@ start:	do
 						// Disconnect from master
 						registered_sub = 2 ;
 						break ;
-				:: timeout -> goto start ;
 				od
 			:: registered_sub == 2 -> break ;
 			:: ended == 1 -> break ;
