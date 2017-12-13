@@ -10,7 +10,7 @@
 *.tmp
 *.sel
 *.o
-*.DS_Strore
+*.DS_Store
 
 pan/
 build/
