@@ -202,9 +202,5 @@ init
 	printf("Total successful messages from publisher 1: %d\n", a_count) ;
 	printf("Total successful messages from publisher 2: %d\n", b_count) ;
 	printf("Total successful messages from publisher 3: %d\n", c_count) ;
-
-	assert(active_mast = 0) ;
-	assert(active_pub = 0) ;
-	assert(active_subs = 0) ;
 }
 
